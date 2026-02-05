@@ -19,33 +19,101 @@
 ## Prerequisites
 
 Before starting this lesson:
-1. Read ATBS Chapters 5–6
-2. Complete Phase 1 (your `search_url.py` should work with hardcoded titles)
-3. Your code should pass: `uv run python src/search_url.py`
+
+1. **Read ATBS Chapters 5–6** — These chapters cover:
+   - Chapter 5: Dictionaries and structuring data
+   - Chapter 6: String manipulation (we'll use `.strip()` and `.replace()`)
+
+2. **Complete Phase 1** — Your `search_url.py` should:
+   - Have a working `create_search_url(title)` function
+   - Successfully create YouTube search URLs
+   - Run without errors: `uv run python src/search_url.py`
+
+3. **Verify your Phase 1 code works**:
+   ```bash
+   uv run python src/search_url.py
+   ```
+   You should see a YouTube URL printed.
 
 ---
 
 ## Tool Setup: Ruff
 
-Before we start coding, let's install **Ruff** — a tool that checks your code for mistakes and style issues. Professional Python developers use tools like this constantly.
+### What is Ruff?
+
+> 📖 **Reference**: This is a professional tool not covered in ATBS, but essential for real-world Python.
+
+**Ruff** is a code checker (called a "linter"). It reads your code and finds:
+- Mistakes that might cause bugs
+- Style issues that make code harder to read
+- Unused code that can be removed
+
+Professional Python developers use linters constantly. Getting comfortable with Ruff now will make you a better programmer.
+
+### Installing Ruff
 
 In your VS Code terminal:
+
 ```bash
 uv add --dev ruff
 ```
 
-The `--dev` flag means this is a development tool, not something your program needs to run.
+**What this command does:**
+- `uv add` — tells uv to install a package
+- `--dev` — marks this as a "development" tool (something you use while coding, not something your program needs to run)
+- `ruff` — the package name
 
-Try it on your existing code:
+You'll see output showing Ruff being installed. This only needs to be done once per project.
+
+### Using Ruff
+
+To check your code, run:
+
 ```bash
 uv run ruff check src/
 ```
 
-If Ruff finds issues, it will tell you what's wrong and which line. Fix them before continuing!
+**What this command does:**
+- `uv run` — runs a command using your project's packages
+- `ruff check` — tells Ruff to check code for issues
+- `src/` — the folder to check (all `.py` files inside)
+
+**If your code is perfect**, you'll see no output — that means no issues!
+
+**If there are issues**, you'll see something like:
+
+```
+src/search_url.py:5:1: F401 [*] `os` imported but unused
+Found 1 error.
+[*] 1 fixable with the `--fix` option.
+```
+
+This tells you:
+- **File**: `src/search_url.py`
+- **Line 5, column 1**: Where the issue is
+- **F401**: The error code (you can search this online for more info)
+- **The problem**: You imported `os` but never used it
+- **Fixable**: Ruff can automatically fix this
+
+### Auto-fixing Issues
+
+Ruff can fix many issues automatically:
+
+```bash
+uv run ruff check src/ --fix
+```
+
+Try it! It will remove unused imports, fix spacing, and more.
 
 ### Make Ruff Part of Your Workflow
 
-From now on, run `uv run ruff check src/` after writing code. It catches mistakes before you even run your program.
+From now on, **always run Ruff before committing your code**:
+
+```bash
+uv run ruff check src/
+```
+
+If there are errors, fix them. If you're not sure how to fix something, try `--fix` first, then look at what changed.
 
 ---
 
@@ -53,168 +121,35 @@ From now on, run `uv run ruff check src/` after writing code. It catches mistake
 
 ### Concepts to Understand
 
-The `input()` function pauses your program and waits for the user to type something:
+> 📖 **Reference**: ATBS Chapter 1, "The input() Function" section
+
+Right now, your script uses a hardcoded title. Let's make it ask the user what to search for.
+
+The `input()` function:
+1. Displays a message (called a **prompt**)
+2. Waits for the user to type something and press Enter
+3. Returns what they typed as a string
 
 ```python
 name = input("What is your name? ")
 print("Hello, " + name)
 ```
 
-The text inside `input()` is the **prompt** — what the user sees before typing.
+**What happens when you run this:**
+1. The program displays `What is your name? ` and waits
+2. You type `Patrick` and press Enter
+3. `input()` returns the string `"Patrick"`
+4. That string is stored in the variable `name`
+5. The program prints `Hello, Patrick`
 
-**Important**: `input()` always returns a **string**, even if the user types a number.
+**Important**: `input()` always returns a **string**, even if the user types numbers. If they type `42`, you get `"42"` (the string), not `42` (the number).
 
 ### Exercise 2.1: Add User Input
 
-Modify your `search_url.py` to:
-1. Ask the user for a video title using `input()`
-2. Pass that title to your `create_search_url()` function
-3. Print the resulting URL
+**What to do:**
 
-Run it with: `uv run python src/search_url.py`
-
-**Check yourself**: Does your script wait for you to type something? Does it create a URL from what you typed?
-
----
-
-## Part 2: Handling Empty Input
-
-### Concepts to Understand
-
-What happens if the user just presses Enter without typing anything? Try it!
-
-You get an empty URL, which isn't useful. We need to **validate** the input.
-
-An `if` statement lets you run code only when a condition is true:
-
-```python
-title = input("Enter title: ")
-if title == "":
-    print("You didn't enter anything!")
-```
-
-The `==` operator checks if two things are equal.
-
-### Exercise 2.2: Reject Empty Input
-
-Update your script to:
-1. Check if the user's input is empty
-2. If empty, print an error message instead of a URL
-3. If not empty, create and print the URL
-
-**Hint**: An empty string is `""`. You can check for it with `if title == "":` or even simpler: `if not title:` (empty strings are "falsy" in Python).
-
-**Check yourself**: What happens when you press Enter without typing? What about when you type a title?
-
----
-
-## Part 3: Looping Until Valid
-
-### Concepts to Understand
-
-Right now, if the user enters nothing, the program just ends. Better: keep asking until they give valid input.
-
-A `while` loop repeats code as long as a condition is true:
-
-```python
-title = ""
-while title == "":
-    title = input("Enter title: ")
-    if title == "":
-        print("Title cannot be empty. Try again.")
-```
-
-The loop keeps running until `title` is no longer empty.
-
-### Exercise 2.3: Input Loop
-
-Refactor your script to:
-1. Keep asking for input until the user provides a non-empty title
-2. Print helpful error messages when input is invalid
-3. Only create the URL after valid input is received
-
-**Check yourself**: Can you "break" your script by pressing Enter multiple times? It should keep asking.
-
----
-
-## Part 4: Trimming Whitespace
-
-### Concepts to Understand
-
-What if the user types `"   "` (just spaces)? That's technically not empty, but it's not useful either.
-
-The `.strip()` method removes spaces from the beginning and end of a string:
-
-```python
-title = "  hello world  "
-clean_title = title.strip()
-# clean_title is now "hello world"
-```
-
-### Exercise 2.4: Clean the Input
-
-Update your input handling to:
-1. Strip whitespace from the user's input
-2. Check if the stripped input is empty
-3. Handle spaces-only input the same as empty input
-
-**Check yourself**: Does typing only spaces trigger the "empty input" error?
-
----
-
-## Part 5: Dictionaries for Mapping
-
-### Concepts to Understand
-
-A **dictionary** maps keys to values. Think of it like a real dictionary: you look up a word (key) to find its definition (value).
-
-```python
-abbreviations = {
-    "ep": "episode",
-    "pt": "part",
-    "s": "season"
-}
-
-# Look up a key
-full_word = abbreviations["ep"]  # Returns "episode"
-```
-
-This is useful for expanding common abbreviations in search terms.
-
-### Exercise 2.5: Expand Abbreviations (Optional)
-
-Create a dictionary that maps common abbreviations to their full forms. Before creating the URL, replace abbreviations in the title.
-
-Example:
-- User types: `"office s3 ep5"`
-- Expanded: `"office season 3 episode 5"`
-
-**Hint**: Loop through the dictionary and use `.replace()`:
-```python
-for abbrev, full in abbreviations.items():
-    title = title.replace(abbrev, full)
-```
-
-This is optional but good practice with dictionaries.
-
----
-
-## Part 6: Putting It Together
-
-### Exercise 2.6: Final Interactive Script
-
-Your completed `src/search_url.py` should:
-
-1. Import `quote_plus` from `urllib.parse`
-2. Define `create_search_url(title)` function (from Phase 1)
-3. Have a `main()` function that:
-   - Loops until valid input is received
-   - Strips and validates the input
-   - Optionally expands abbreviations
-   - Creates and prints the URL
-4. Call `main()` at the bottom
-
-### Script Structure
+1. Open `src/search_url.py`
+2. Replace your hardcoded title code with this:
 
 ```python
 from urllib.parse import quote_plus
@@ -229,19 +164,539 @@ def create_search_url(title):
     Returns:
         A YouTube search URL with the title properly encoded.
     """
-    # Your code here
+    encoded_title = quote_plus(title)
+    base_url = "https://www.youtube.com/results?search_query="
+    return base_url + encoded_title
+
+
+# Get input from the user
+video_title = input("Enter a video title to search: ")
+url = create_search_url(video_title)
+print("Search URL:", url)
+```
+
+3. Save and run: `uv run python src/search_url.py`
+
+**What you should see:**
+
+```
+Enter a video title to search: funny cat videos
+Search URL: https://www.youtube.com/results?search_query=funny+cat+videos
+```
+
+(The first line waits for you to type. The second line appears after you press Enter.)
+
+**Understanding what happened:**
+- Line 17: `input()` displayed the prompt and waited for you to type
+- When you typed `funny cat videos` and pressed Enter, that string was stored in `video_title`
+- Line 18-19: Your existing function created the URL and printed it
+
+**Check yourself**:
+- Does your script wait for you to type something?
+- Does it create a URL from what you typed?
+- Try different titles — do they all work?
+
+---
+
+## Part 2: Handling Empty Input
+
+### The Problem
+
+**Try this:** Run your script and just press Enter without typing anything.
+
+What happens? You probably get a URL like:
+```
+https://www.youtube.com/results?search_query=
+```
+
+That's a valid URL, but it's useless — there's no search term! We need to **validate** the input (check that it's acceptable before using it).
+
+### Concepts to Understand: If Statements
+
+> 📖 **Reference**: ATBS Chapter 2, "Flow Control" section
+
+An **if statement** runs code only when a condition is true:
+
+```python
+age = 18
+
+if age >= 18:
+    print("You are an adult")
+```
+
+The indented code only runs if `age >= 18` is true. If `age` were 15, nothing would print.
+
+**Comparison operators:**
+- `==` — equals (two equals signs, not one!)
+- `!=` — not equals
+- `>` — greater than
+- `<` — less than
+- `>=` — greater than or equal to
+- `<=` — less than or equal to
+
+**Common mistake**: Using `=` instead of `==`. Remember:
+- `=` means "assign this value" (put something in a box)
+- `==` means "are these equal?" (compare two things)
+
+### If-Else Statements
+
+You can add an `else` block for when the condition is false:
+
+```python
+title = input("Enter title: ")
+
+if title == "":
+    print("You didn't enter anything!")
+else:
+    print("You entered:", title)
+```
+
+Either the `if` block runs OR the `else` block runs — never both.
+
+### Exercise 2.2: Reject Empty Input
+
+**What to do:**
+
+1. Update your script to check for empty input:
+
+```python
+from urllib.parse import quote_plus
+
+
+def create_search_url(title):
+    """Convert a video title to a YouTube search URL.
+
+    Args:
+        title: The video title to search for.
+
+    Returns:
+        A YouTube search URL with the title properly encoded.
+    """
+    encoded_title = quote_plus(title)
+    base_url = "https://www.youtube.com/results?search_query="
+    return base_url + encoded_title
+
+
+# Get input from the user
+video_title = input("Enter a video title to search: ")
+
+# Check if the input is empty
+if video_title == "":
+    print("Error: You must enter a title!")
+else:
+    url = create_search_url(video_title)
+    print("Search URL:", url)
+```
+
+2. Save and run: `uv run python src/search_url.py`
+
+**Test it:**
+- Press Enter without typing → Should show error message
+- Type a title and press Enter → Should show URL
+
+**A simpler way to check for empty strings:**
+
+In Python, empty strings are "falsy" — they act like `False` in conditions. So you can write:
+
+```python
+if not video_title:
+    print("Error: You must enter a title!")
+```
+
+This is more "Pythonic" (the style Python programmers prefer). Both ways work!
+
+---
+
+## Part 3: Looping Until Valid
+
+### The Problem
+
+Right now, if the user enters nothing, the program just shows an error and ends. Better: keep asking until they give valid input.
+
+### Concepts to Understand: While Loops
+
+> 📖 **Reference**: ATBS Chapter 2, "while Loop Statements" section
+
+A **while loop** repeats code as long as a condition is true:
+
+```python
+count = 0
+while count < 3:
+    print("Count is:", count)
+    count = count + 1
+print("Done!")
+```
+
+**Output:**
+```
+Count is: 0
+Count is: 1
+Count is: 2
+Done!
+```
+
+The loop checks `count < 3` before each iteration:
+- `0 < 3` → True → run the loop → count becomes 1
+- `1 < 3` → True → run the loop → count becomes 2
+- `2 < 3` → True → run the loop → count becomes 3
+- `3 < 3` → False → exit the loop → print "Done!"
+
+**Warning**: If the condition never becomes false, the loop runs forever! This is called an **infinite loop**. If your script seems stuck, press `Ctrl+C` to stop it.
+
+### Using While for Input Validation
+
+We can loop until the user provides valid input:
+
+```python
+title = ""  # Start with empty string
+
+while title == "":
+    title = input("Enter title: ")
+    if title == "":
+        print("Title cannot be empty. Try again.")
+
+# Only get here when title is not empty
+print("You entered:", title)
+```
+
+### Exercise 2.3: Input Loop
+
+**What to do:**
+
+1. Update your script to keep asking until valid input:
+
+```python
+from urllib.parse import quote_plus
+
+
+def create_search_url(title):
+    """Convert a video title to a YouTube search URL.
+
+    Args:
+        title: The video title to search for.
+
+    Returns:
+        A YouTube search URL with the title properly encoded.
+    """
+    encoded_title = quote_plus(title)
+    base_url = "https://www.youtube.com/results?search_query="
+    return base_url + encoded_title
+
+
+# Keep asking until we get valid input
+video_title = ""
+
+while video_title == "":
+    video_title = input("Enter a video title to search: ")
+    if video_title == "":
+        print("Error: Title cannot be empty. Please try again.")
+
+# We only get here when video_title is not empty
+url = create_search_url(video_title)
+print("Search URL:", url)
+```
+
+2. Save and run: `uv run python src/search_url.py`
+
+**Test it:**
+- Press Enter multiple times — it should keep asking
+- Type a title — it should show the URL and stop
+
+**Understanding what happened:**
+- Line 18: We start with `video_title = ""` so the while condition is true
+- Line 20: The loop starts
+- Line 21: We ask for input
+- Line 22-23: If empty, we print an error (but stay in the loop!)
+- The loop repeats until `video_title` is not empty
+- Line 26-27: Only runs after valid input
+
+---
+
+## Part 4: Trimming Whitespace
+
+### The Problem
+
+Try this: Run your script and type just spaces, then press Enter.
+
+```
+Enter a video title to search:
+Search URL: https://www.youtube.com/results?search_query=%20%20%20%20%20
+```
+
+The spaces get encoded, but this isn't a useful search. We should treat spaces-only input the same as empty input.
+
+### Concepts to Understand: String Methods
+
+> 📖 **Reference**: ATBS Chapter 6, "strip(), lstrip(), and rstrip()" section
+
+Strings have **methods** — functions that belong to the string. The `.strip()` method removes whitespace (spaces, tabs, newlines) from both ends:
+
+```python
+title = "  hello world  "
+clean_title = title.strip()
+print(clean_title)  # Displays: hello world (no leading/trailing spaces)
+```
+
+**Important**: `.strip()` returns a NEW string — it doesn't modify the original:
+
+```python
+title = "  hello  "
+title.strip()  # This does nothing useful!
+print(title)   # Still has spaces: "  hello  "
+
+title = title.strip()  # This works — we reassign the variable
+print(title)           # Now it's "hello"
+```
+
+### Exercise 2.4: Clean the Input
+
+**What to do:**
+
+1. Update your script to strip whitespace:
+
+```python
+from urllib.parse import quote_plus
+
+
+def create_search_url(title):
+    """Convert a video title to a YouTube search URL.
+
+    Args:
+        title: The video title to search for.
+
+    Returns:
+        A YouTube search URL with the title properly encoded.
+    """
+    encoded_title = quote_plus(title)
+    base_url = "https://www.youtube.com/results?search_query="
+    return base_url + encoded_title
+
+
+# Keep asking until we get valid input
+video_title = ""
+
+while not video_title:  # Using the Pythonic way
+    user_input = input("Enter a video title to search: ")
+    video_title = user_input.strip()  # Remove leading/trailing whitespace
+
+    if not video_title:
+        print("Error: Title cannot be empty. Please try again.")
+
+# We only get here when video_title is not empty
+url = create_search_url(video_title)
+print("Search URL:", url)
+```
+
+2. Save and run: `uv run python src/search_url.py`
+
+**Test it:**
+- Type only spaces → Should show error and ask again
+- Type a valid title with extra spaces → Should work (spaces get stripped)
+
+**Notice**: We now use `not video_title` instead of `video_title == ""`. This is the Pythonic style that Ruff prefers.
+
+---
+
+## Part 5: Dictionaries for Mapping
+
+### Concepts to Understand
+
+> 📖 **Reference**: ATBS Chapter 5, "The Dictionary Data Type" section
+
+A **dictionary** stores key-value pairs. Think of it like a real dictionary where you look up a word (key) to find its definition (value):
+
+```python
+# Creating a dictionary
+abbreviations = {
+    "ep": "episode",
+    "pt": "part",
+    "s": "season"
+}
+```
+
+**Dictionary syntax:**
+- Curly braces `{}` contain the dictionary
+- Each entry is `key: value`
+- Entries are separated by commas
+
+**Looking up values:**
+
+```python
+full_word = abbreviations["ep"]  # Returns "episode"
+print(full_word)
+```
+
+If you try to look up a key that doesn't exist, you get a `KeyError`. To avoid this, use `.get()`:
+
+```python
+result = abbreviations.get("xyz", "not found")  # Returns "not found"
+```
+
+**Looping through a dictionary:**
+
+```python
+for abbrev, full in abbreviations.items():
+    print(f"{abbrev} = {full}")
+```
+
+Output:
+```
+ep = episode
+pt = part
+s = season
+```
+
+### Exercise 2.5: Expand Abbreviations (Optional)
+
+This exercise is optional but teaches important dictionary concepts.
+
+**Goal**: Automatically expand abbreviations like "s3" to "season 3" and "ep5" to "episode 5".
+
+**What to do:**
+
+1. Create a function that expands abbreviations:
+
+```python
+def expand_abbreviations(title):
+    """Expand common abbreviations in a title.
+
+    Args:
+        title: The title that may contain abbreviations.
+
+    Returns:
+        The title with abbreviations expanded.
+    """
+    abbreviations = {
+        " ep": " episode",
+        " pt": " part",
+        " s": " season"
+    }
+
+    result = title.lower()  # Convert to lowercase for matching
+
+    for abbrev, full in abbreviations.items():
+        result = result.replace(abbrev, full)
+
+    return result
+```
+
+2. Use it before creating the URL:
+
+```python
+video_title = expand_abbreviations(video_title)
+url = create_search_url(video_title)
+```
+
+**Try it:**
+- Input: `office s3 ep5`
+- Output should search for: `office season3 episode5`
+
+**Note**: This is a simple implementation. It won't handle every case perfectly, but it demonstrates how dictionaries work!
+
+---
+
+## Part 6: Organizing with a Main Function
+
+### Concepts to Understand
+
+> 📖 **Reference**: ATBS Chapter 3 discusses functions, but main() is a convention you'll see everywhere.
+
+As your code grows, it's good to organize it into functions. A common pattern is to put your program's main logic in a function called `main()`:
+
+```python
+def main():
+    """Main program logic goes here."""
+    print("Hello from main!")
+
+# This calls main() when you run the script
+main()
+```
+
+### The `if __name__ == "__main__":` Pattern
+
+You'll often see this at the bottom of Python files:
+
+```python
+if __name__ == "__main__":
+    main()
+```
+
+**What this means:**
+- When you run a Python file directly (`python script.py`), Python sets `__name__` to `"__main__"`
+- When you import a file into another file, `__name__` is set to the module name instead
+- This `if` block only runs the code when the file is executed directly, not when imported
+
+**Why use it?**
+- Later, you might want to import `create_search_url()` from another script
+- Without this pattern, running `import search_url` would also run your main code
+- With this pattern, importing only loads the functions
+
+For now, just know it's good practice to include it.
+
+### Exercise 2.6: Final Interactive Script
+
+**What to do:**
+
+1. Organize your script with a `main()` function:
+
+```python
+"""YouTube search URL generator with user input.
+
+This script asks the user for a video title and creates a YouTube search URL.
+"""
+from urllib.parse import quote_plus
+
+
+def create_search_url(title):
+    """Convert a video title to a YouTube search URL.
+
+    Args:
+        title: The video title to search for.
+
+    Returns:
+        A YouTube search URL with the title properly encoded.
+    """
+    encoded_title = quote_plus(title)
+    base_url = "https://www.youtube.com/results?search_query="
+    return base_url + encoded_title
+
+
+def get_video_title():
+    """Prompt the user for a video title until valid input is received.
+
+    Returns:
+        A non-empty, stripped video title string.
+    """
+    video_title = ""
+
+    while not video_title:
+        user_input = input("Enter a video title to search: ")
+        video_title = user_input.strip()
+
+        if not video_title:
+            print("Error: Title cannot be empty. Please try again.")
+
+    return video_title
 
 
 def main():
-    """Prompt user for a video title and print the search URL."""
-    # Your input loop and validation here
+    """Main program: get title from user and display search URL."""
+    video_title = get_video_title()
+    url = create_search_url(video_title)
+    print("Search URL:", url)
 
 
 if __name__ == "__main__":
     main()
 ```
 
-The `if __name__ == "__main__":` block is a Python pattern that runs `main()` only when the script is executed directly (not imported).
+2. Save and run: `uv run python src/search_url.py`
+
+**Understanding the structure:**
+- `create_search_url()` — converts a title to a URL (from Phase 1)
+- `get_video_title()` — handles all the input validation
+- `main()` — coordinates everything
+- `if __name__ == "__main__":` — ensures `main()` runs when we execute the script
 
 ---
 
@@ -253,15 +708,19 @@ Before committing, check your code:
 uv run ruff check src/
 ```
 
-Fix any issues Ruff finds. Common issues for beginners:
-- Unused imports
-- Trailing whitespace
-- Missing blank lines between functions
+**Common issues Ruff finds:**
+- Unused imports (you imported something but never used it)
+- Trailing whitespace (invisible spaces at the end of lines)
+- Missing blank lines between functions (PEP 8 style says 2 blank lines)
+- Using `== ""` instead of `not variable`
 
-Ruff can auto-fix many issues:
+If Ruff finds issues, try:
+
 ```bash
 uv run ruff check src/ --fix
 ```
+
+This auto-fixes most problems. Then run `ruff check` again to verify.
 
 ---
 
@@ -273,6 +732,7 @@ Run your script and verify:
 - [ ] Pressing Enter (empty input) shows an error and asks again
 - [ ] Typing only spaces shows an error and asks again
 - [ ] Valid input produces a working YouTube search URL
+- [ ] The URL works when pasted into a browser
 - [ ] `uv run ruff check src/` passes with no errors
 
 ---
@@ -282,15 +742,44 @@ Run your script and verify:
 | Problem | Likely Cause |
 |---------|--------------|
 | Script runs but never asks for input | Did you call `main()` at the bottom? |
-| Input loop runs forever | Your condition never becomes false. Check the logic. |
-| `.strip()` not working | Make sure you're assigning the result: `title = title.strip()` |
-| Ruff complains about `if title == "":` | Ruff prefers `if not title:`. Both work, but the second is more "Pythonic". |
+| Input loop runs forever | Your condition never becomes false. Check that you're updating `video_title` inside the loop. |
+| `.strip()` not working | Make sure you assign the result: `title = title.strip()` |
+| `if title = "":` gives error | You used `=` (assignment) instead of `==` (comparison) |
+| Ruff complains about `if title == "":` | Ruff prefers `if not title:`. Both work, but the second is more Pythonic. |
+| `IndentationError` in if/while | All code inside the if/while must be indented the same amount |
+
+---
+
+## Vocabulary Review
+
+Terms you learned in this phase:
+
+| Term | Definition |
+|------|------------|
+| **input()** | Function that prompts the user and returns what they type |
+| **Prompt** | The message shown to the user before they type |
+| **Validation** | Checking that input is acceptable before using it |
+| **If statement** | Runs code only when a condition is true |
+| **Else** | Runs code when the if condition is false |
+| **While loop** | Repeats code as long as a condition is true |
+| **Infinite loop** | A loop that never ends (usually a bug) |
+| **Dictionary** | A data structure that maps keys to values |
+| **Key** | The lookup term in a dictionary |
+| **Value** | What you get back when you look up a key |
+| **.strip()** | String method that removes whitespace from both ends |
+| **Linter** | A tool that checks code for mistakes and style issues |
+| **Ruff** | The Python linter we're using |
 
 ---
 
 ## What's Next
 
-In **Phase 3**, you'll connect to the real YouTube API to get actual video URLs instead of just search pages. You'll also learn about type hints and start using `ty` to catch type errors.
+In **Phase 3**, you'll connect to the real YouTube API to get actual video URLs instead of just search pages. You'll learn:
+- How to make HTTP requests with the `requests` library
+- How to work with JSON data from APIs
+- How to open URLs in the browser automatically
+- **Type hints** — annotations that help catch bugs
+- **ty** — a type checker tool (like Ruff, but for types)
 
 ---
 
@@ -298,7 +787,15 @@ In **Phase 3**, you'll connect to the real YouTube API to get actual video URLs 
 
 Once everything works and Ruff passes:
 
-```bash
-git add src/search_url.py
-git commit -m "Phase 2: Add interactive input with validation"
-```
+1. Check what files changed:
+   ```bash
+   git status
+   ```
+
+2. Add and commit:
+   ```bash
+   git add src/search_url.py
+   git commit -m "Phase 2: Add interactive input with validation"
+   ```
+
+You've made your first interactive Python program!
