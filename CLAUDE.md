@@ -178,6 +178,19 @@ Reviewing each lesson to ensure complete beginners can follow along:
 | 6 | ✅ DONE | Added: CLI concepts intro, argparse tutorial with subcommands, step-by-step command implementations, complete working code, run.bat script for Windows, vocabulary table |
 | 7 | ✅ DONE | Added: Flask web basics, decorator explanation, complete web app code, HTML templates with Jinja2, form handling, project summary, "what's next" guidance, vocabulary table |
 
+### Git Learning Progression
+
+Git is taught progressively alongside Python. Each phase introduces new Git concepts:
+
+| Phase | Git Concepts Introduced | Commands Learned |
+|-------|------------------------|------------------|
+| README | SSH setup, cloning repos, Git workflow overview | `git clone`, `git config` |
+| 1 | What is Git, the three areas, basic workflow | `git status`, `git add`, `git commit`, `git log` |
+| 2 | Seeing what changed, fixing commits | `git diff`, `git diff --staged`, `git commit --amend` |
+| 3 | Working with GitHub, syncing code | `git remote`, `git push`, `git pull` |
+| 4 | Undoing changes, reverting commits | `git checkout --`, `git restore`, `git revert`, `git reset` |
+| 5 | Branches and merging | `git branch`, `git checkout -b`, `git switch`, `git merge` |
+
 ### Learner Progress
 
 - [ ] Phase 1: String Manipulation

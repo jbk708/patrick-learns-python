@@ -638,13 +638,199 @@ In **Phase 6**, you'll combine everything into a unified CLI tool. The tool will
 
 ---
 
-## Commit Your Work
+## Git: Branches and Merging
+
+Up until now, you've been working on a single branch called `main`. But what if you want to try an experiment without risking your working code? That's what **branches** are for.
+
+### What is a Branch?
+
+A **branch** is an independent line of development. Think of it like:
+- A parallel universe for your code
+- A safe place to experiment
+- A way to work on features without affecting the main code
+
+```
+        feature-x
+         ↙
+main ──●──●──●──●──●
+         ↖
+        bugfix
+```
+
+Multiple branches can exist at once, each with its own commits.
+
+### Viewing Branches
+
+See all your branches:
+```bash
+git branch
+```
+
+The branch with `*` is your current branch:
+```
+* main
+```
+
+### Creating a New Branch
+
+Create and switch to a new branch in one command:
+```bash
+git checkout -b experiment
+```
+
+This creates a branch called `experiment` and switches to it.
+
+**Newer syntax (Git 2.23+):**
+```bash
+git switch -c experiment
+```
+
+Now `git branch` shows:
+```
+  main
+* experiment
+```
+
+### Switching Between Branches
+
+Switch to an existing branch:
+```bash
+git checkout main
+```
+
+**Newer syntax:**
+```bash
+git switch main
+```
+
+**Important**: Commit or stash your changes before switching branches! Uncommitted changes follow you between branches, which can get confusing.
+
+### Making Changes on a Branch
+
+When you're on a branch, your commits only affect that branch:
+
+```bash
+git checkout -b add-timeout-config    # Create and switch to new branch
+# Make your changes...
+git add src/roku_status.py
+git commit -m "Add configurable timeout for Roku requests"
+```
+
+The `main` branch is unchanged — your experiment is isolated.
+
+### Merging Branches
+
+When your experiment works, you can merge it back into `main`:
+
+**Step 1: Switch to the branch you want to merge INTO**
+```bash
+git checkout main
+```
+
+**Step 2: Merge the feature branch**
+```bash
+git merge add-timeout-config
+```
+
+If there are no conflicts, Git combines the histories:
+```
+Updating a1b2c3d..e4f5g6h
+Fast-forward
+ src/roku_status.py | 5 +++++
+ 1 file changed, 5 insertions(+)
+```
+
+**Step 3: Delete the feature branch (optional)**
+```bash
+git branch -d add-timeout-config
+```
+
+### Handling Merge Conflicts
+
+Sometimes Git can't automatically merge because both branches changed the same lines. You'll see:
+```
+Auto-merging src/roku_status.py
+CONFLICT (content): Merge conflict in src/roku_status.py
+Automatic merge failed; fix conflicts and then commit the result.
+```
+
+**How to resolve:**
+
+1. Open the conflicting file. You'll see conflict markers:
+   ```python
+   <<<<<<< HEAD
+   timeout = 5
+   =======
+   timeout = 10
+   >>>>>>> add-timeout-config
+   ```
+
+2. Edit the file to keep what you want (remove the markers):
+   ```python
+   timeout = 10  # Using the longer timeout
+   ```
+
+3. Stage and commit:
+   ```bash
+   git add src/roku_status.py
+   git commit -m "Merge add-timeout-config, use longer timeout"
+   ```
+
+### When to Use Branches
+
+| Situation | Branch Name Convention |
+|-----------|----------------------|
+| New feature | `feature/description` or `add-description` |
+| Bug fix | `fix/description` or `bugfix-description` |
+| Experiment | `experiment/description` or `try-description` |
+
+For small personal projects, you might not need branches often. But for larger projects or when collaborating, they're essential.
+
+### Exercise: Practice Branching (Optional)
+
+1. Create a branch: `git checkout -b test-branch`
+2. Make a small change (add a comment)
+3. Commit it
+4. Switch back: `git checkout main`
+5. Notice your change isn't there!
+6. Merge: `git merge test-branch`
+7. Now the change is in main
+8. Clean up: `git branch -d test-branch`
+
+### Commit Your Work
 
 Once everything works:
 
+**Step 1: Stage and commit**
 ```bash
 git add src/roku_status.py config.json.example
 git commit -m "Phase 5: Add Roku ECP status queries"
 ```
 
-You've learned how to communicate with a local network device!
+**Step 2: Push to GitHub**
+```bash
+git push
+```
+
+### Git Commands Learned So Far
+
+| Command | What It Does |
+|---------|--------------|
+| `git status` | Show what's changed |
+| `git add <file>` | Stage changes for commit |
+| `git commit -m "msg"` | Save staged changes |
+| `git log` | Show commit history |
+| `git diff` | Show changes line-by-line |
+| `git commit --amend` | Fix your last commit |
+| `git push` | Upload commits to GitHub |
+| `git pull` | Download commits from GitHub |
+| `git checkout -- <file>` | Discard uncommitted changes |
+| `git revert <commit>` | Create a commit that undoes another commit |
+| `git reset HEAD~1` | Undo the last commit |
+| `git branch` | List branches |
+| `git checkout -b <name>` | Create and switch to a new branch |
+| `git switch <name>` | Switch to a branch (newer syntax) |
+| `git merge <branch>` | Merge another branch into current branch |
+| `git branch -d <name>` | Delete a branch |
+
+You've learned how to communicate with a local network device and how to experiment safely with Git branches!

@@ -709,13 +709,146 @@ In **Phase 5**, you'll connect to your Roku device to see what's currently playi
 
 ---
 
-## Commit Your Work
+## Git: Undoing Changes and Reverting Commits
+
+Everyone makes mistakes. Git gives you powerful tools to undo changes — whether you haven't committed yet, or you need to undo a commit you already made.
+
+### Scenario 1: Undo Uncommitted Changes in a File
+
+You edited a file, but you want to discard those changes and go back to the last commit:
+
+```bash
+git checkout -- src/history.py
+```
+
+**Warning**: This permanently discards your uncommitted changes! There's no undo for this.
+
+**Newer syntax (Git 2.23+):**
+```bash
+git restore src/history.py
+```
+
+Both commands do the same thing.
+
+### Scenario 2: Unstage a File
+
+You ran `git add` but changed your mind:
+
+```bash
+git reset HEAD src/history.py
+```
+
+This removes the file from the staging area but keeps your changes in the working directory.
+
+**Newer syntax:**
+```bash
+git restore --staged src/history.py
+```
+
+### Scenario 3: Undo a Commit (Safe Way): `git revert`
+
+You made a commit, pushed it, and now you want to undo it. The safe way is `git revert`:
+
+```bash
+git revert HEAD
+```
+
+This creates a **new commit** that undoes the changes from the previous commit. The history shows:
+1. Original commit (the mistake)
+2. Revert commit (the undo)
+
+**Why is this "safe"?** It doesn't rewrite history. If you've already pushed, this won't cause problems for others.
+
+**Reverting an older commit:**
+```bash
+git log --oneline  # Find the commit ID
+git revert abc1234  # Revert that specific commit
+```
+
+### Scenario 4: Undo a Commit (Rewrite History): `git reset`
+
+If you haven't pushed yet and want to undo your last commit:
+
+**Keep the changes (just undo the commit):**
+```bash
+git reset --soft HEAD~1
+```
+
+Your changes are still staged, ready to commit again.
+
+**Unstage the changes too:**
+```bash
+git reset HEAD~1
+```
+
+Your changes are still in your files, just unstaged.
+
+**Discard everything (dangerous!):**
+```bash
+git reset --hard HEAD~1
+```
+
+**Warning**: `--hard` permanently discards your changes! Use with caution.
+
+**What's `HEAD~1`?** It means "one commit before HEAD (the current commit)."
+- `HEAD~2` = two commits back
+- `HEAD~3` = three commits back
+
+### When to Use Each
+
+| Situation | Command |
+|-----------|---------|
+| Discard uncommitted changes in a file | `git checkout -- <file>` or `git restore <file>` |
+| Unstage a file | `git reset HEAD <file>` or `git restore --staged <file>` |
+| Undo a commit you already pushed | `git revert HEAD` |
+| Undo a commit you haven't pushed | `git reset HEAD~1` |
+| Nuclear option: reset everything | `git reset --hard HEAD~1` (careful!) |
+
+### Exercise: Practice Undoing (Optional)
+
+Try this in a safe way:
+
+1. Make a small change to `src/history.py` (add a comment)
+2. Check the change: `git diff`
+3. Undo it: `git checkout -- src/history.py`
+4. Verify it's gone: `git diff` (should show nothing)
+
+### Commit Your Work
 
 Once everything works and passes the checks:
 
+**Step 1: Review changes**
+```bash
+git status
+git diff
+```
+
+**Step 2: Stage and commit**
 ```bash
 git add src/history.py src/youtube_search.py config.json.example .gitignore
 git commit -m "Phase 4: Add search history and robust file paths"
 ```
 
-You can now track your search history and your code works from any directory!
+**Step 3: Push to GitHub**
+```bash
+git push
+```
+
+### Git Commands Learned So Far
+
+| Command | What It Does |
+|---------|--------------|
+| `git status` | Show what's changed |
+| `git add <file>` | Stage changes for commit |
+| `git commit -m "msg"` | Save staged changes |
+| `git log` | Show commit history |
+| `git diff` | Show changes line-by-line |
+| `git commit --amend` | Fix your last commit |
+| `git push` | Upload commits to GitHub |
+| `git pull` | Download commits from GitHub |
+| `git checkout -- <file>` | Discard uncommitted changes |
+| `git restore <file>` | Discard uncommitted changes (newer syntax) |
+| `git revert <commit>` | Create a commit that undoes another commit |
+| `git reset HEAD~1` | Undo the last commit (keep changes) |
+
+You can now track your search history and recover from mistakes!

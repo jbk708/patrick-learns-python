@@ -58,9 +58,149 @@ You should see something like `uv 0.5.x`.
    git --version
    ```
 
+### 5. Configure Git (First-Time Setup)
+
+Git needs to know who you are so it can label your commits. Run these commands once (replace with your info):
+
+```bash
+git config --global user.name "Your Name"
+git config --global user.email "your.email@example.com"
+```
+
+This stores your info in a global config file. You only need to do this once per computer.
+
 ---
 
-## Project Setup
+## Setting Up GitHub and SSH
+
+### What is GitHub?
+
+**GitHub** is a website that stores Git repositories online. It lets you:
+- Back up your code in the cloud
+- Share code with others
+- Collaborate on projects
+- Access your code from any computer
+
+### Creating a GitHub Account
+
+1. Go to [github.com](https://github.com)
+2. Click "Sign up" and follow the prompts
+3. Choose the free plan (it's plenty for learning)
+4. Verify your email address
+
+### Setting Up SSH Keys
+
+**SSH keys** let you connect to GitHub without typing your password every time. It's like a secure digital ID card.
+
+**Step 1: Check for existing SSH keys**
+
+Open Command Prompt (or Git Bash, which came with Git) and run:
+```bash
+ls ~/.ssh
+```
+
+If you see files like `id_rsa` and `id_rsa.pub`, you already have keys. Skip to Step 3.
+
+If you get "No such file or directory", continue to Step 2.
+
+**Step 2: Generate a new SSH key**
+
+Run this command (use the email you registered on GitHub):
+```bash
+ssh-keygen -t ed25519 -C "your.email@example.com"
+```
+
+When it asks "Enter file in which to save the key", just press Enter to accept the default.
+
+When it asks for a passphrase, you can either:
+- Press Enter for no passphrase (easier but less secure)
+- Type a passphrase you'll remember (more secure)
+
+**Step 3: Add your SSH key to the SSH agent**
+
+Start the SSH agent:
+```bash
+eval "$(ssh-agent -s)"
+```
+
+Add your key:
+```bash
+ssh-add ~/.ssh/id_ed25519
+```
+
+**Step 4: Add the SSH key to GitHub**
+
+Copy your public key to the clipboard:
+```bash
+cat ~/.ssh/id_ed25519.pub
+```
+
+Select and copy the entire output (starts with `ssh-ed25519` and ends with your email).
+
+Then:
+1. Go to [GitHub → Settings → SSH and GPG keys](https://github.com/settings/keys)
+2. Click "New SSH key"
+3. Give it a title like "My Windows Laptop"
+4. Paste the key into the "Key" field
+5. Click "Add SSH key"
+
+**Step 5: Test the connection**
+
+```bash
+ssh -T git@github.com
+```
+
+If it asks "Are you sure you want to continue connecting?", type `yes`.
+
+You should see: "Hi username! You've successfully authenticated..."
+
+---
+
+## Cloning This Repository
+
+If someone has shared this project with you on GitHub, here's how to get it on your computer:
+
+**Step 1: Get the repository URL**
+
+On the GitHub repository page:
+1. Click the green "Code" button
+2. Make sure "SSH" is selected (not HTTPS)
+3. Copy the URL (looks like `git@github.com:username/repo-name.git`)
+
+**Step 2: Clone the repository**
+
+Open Command Prompt and navigate to where you want the project:
+```bash
+cd Documents
+```
+
+Clone the repository:
+```bash
+git clone git@github.com:username/patrick-learns-python.git
+```
+
+This creates a new folder with all the project files.
+
+**Step 3: Open in VS Code**
+
+```bash
+cd patrick-learns-python
+code .
+```
+
+**Step 4: Install dependencies**
+
+```bash
+uv sync
+```
+
+This reads `pyproject.toml` and installs all the packages the project needs.
+
+You're ready to start working!
+
+---
+
+## Project Setup (Starting Fresh)
 
 Open Command Prompt and run these commands one at a time:
 
@@ -228,3 +368,60 @@ You'll need this when you reach Phase 5:
   git commit -m "describe what you changed"
   ```
   This gives you a save point to go back to if you break something.
+
+---
+
+## Git Basics Overview
+
+Git is a **version control system** — it tracks changes to your files over time. Think of it like "save points" in a video game.
+
+### The Three Areas of Git
+
+```
+Working Directory → Staging Area → Repository
+     (your files)      (ready to save)   (saved history)
+```
+
+1. **Working Directory**: The files you see and edit
+2. **Staging Area**: Files you've marked to be included in the next save
+3. **Repository**: The complete history of all your saves (commits)
+
+### Essential Commands
+
+| Command | What It Does |
+|---------|--------------|
+| `git status` | Shows what's changed since your last commit |
+| `git add <file>` | Stages a file for the next commit |
+| `git add .` | Stages all changed files |
+| `git commit -m "message"` | Saves staged changes with a description |
+| `git log` | Shows the history of commits |
+| `git push` | Uploads your commits to GitHub |
+| `git pull` | Downloads changes from GitHub |
+
+### A Typical Workflow
+
+1. **Make changes** to your code
+2. **Check what changed**: `git status`
+3. **Stage the changes**: `git add .`
+4. **Commit with a message**: `git commit -m "Add feature X"`
+5. **Push to GitHub**: `git push`
+
+You'll learn these commands gradually through the phases. Each phase introduces new Git concepts:
+
+| Phase | Git Concepts |
+|-------|--------------|
+| 1 | `git status`, `git add`, `git commit`, `git log` |
+| 2 | `git diff`, amending commits |
+| 3 | `git push`, `git pull`, remotes |
+| 4 | Reverting commits, undoing changes |
+| 5 | Branches, merging |
+
+### When Things Go Wrong
+
+Don't panic! Git is designed to help you recover:
+
+- **Made a typo in your last commit message?** `git commit --amend`
+- **Want to undo uncommitted changes?** `git checkout -- <file>`
+- **Need to undo a commit?** `git revert <commit>`
+
+Each phase teaches you more recovery techniques. The beauty of Git is that almost nothing is permanent — you can almost always get back to a good state.

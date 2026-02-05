@@ -871,13 +871,136 @@ In **Phase 4**, you'll add:
 
 ---
 
-## Commit Your Work
+## Git: Working with GitHub (Remotes, Push, Pull)
 
-Once everything works and passes the checks:
+You've been saving commits locally. Now let's learn how to sync with GitHub so your code is backed up online and accessible from anywhere.
 
+### What is a Remote?
+
+A **remote** is a copy of your repository stored somewhere else — usually on GitHub. It lets you:
+- **Back up** your code in the cloud
+- **Share** your code with others
+- **Collaborate** on projects
+- **Work from multiple computers**
+
+### Checking Your Remotes
+
+See what remotes are configured:
+```bash
+git remote -v
+```
+
+If you cloned the repository from GitHub, you'll see:
+```
+origin  git@github.com:username/repo-name.git (fetch)
+origin  git@github.com:username/repo-name.git (push)
+```
+
+`origin` is the conventional name for your main remote.
+
+### Adding a Remote (If You Started Fresh)
+
+If you created the project locally with `git init`, you need to add a remote manually:
+
+**Step 1: Create a repository on GitHub**
+1. Go to [github.com/new](https://github.com/new)
+2. Name it `patrick-learns-python` (or similar)
+3. Don't initialize with README (you already have files)
+4. Click "Create repository"
+
+**Step 2: Connect your local repo to GitHub**
+```bash
+git remote add origin git@github.com:YOUR_USERNAME/patrick-learns-python.git
+```
+
+Replace `YOUR_USERNAME` with your GitHub username.
+
+### Uploading Your Commits: `git push`
+
+The `git push` command sends your commits to GitHub:
+
+```bash
+git push origin main
+```
+
+This pushes your `main` branch to the `origin` remote.
+
+**First push?** You might need to set the upstream branch:
+```bash
+git push -u origin main
+```
+
+The `-u` flag sets `origin/main` as the default — after this, you can just type `git push`.
+
+### Downloading Changes: `git pull`
+
+The `git pull` command downloads commits from GitHub:
+
+```bash
+git pull
+```
+
+Use this when:
+- You're working on multiple computers
+- Someone else pushed changes to the repository
+- GitHub shows your repo is ahead of your local copy
+
+**What happens during a pull?**
+1. Git **fetches** the new commits from GitHub
+2. Git **merges** them into your local branch
+
+If you've made local changes that conflict with the remote changes, Git will ask you to resolve the conflict. We'll cover this more in Phase 5.
+
+### The Push/Pull Workflow
+
+Here's a typical workflow when working with GitHub:
+
+```
+1. Make changes to your code
+2. git add <files>
+3. git commit -m "message"
+4. git pull (get any new changes from GitHub first)
+5. git push (upload your changes)
+```
+
+**Why pull before push?** If someone else (or you on another computer) pushed changes, you need to get them first. Otherwise, Git will reject your push.
+
+### Exercise: Commit and Push Your Work
+
+**Step 1: Commit locally**
 ```bash
 git add src/youtube_search.py
 git commit -m "Phase 3: Add YouTube API search with type hints"
 ```
 
-You've built a program that talks to a real web API!
+**Step 2: Pull any remote changes**
+```bash
+git pull
+```
+
+(If this is your first time and there's no remote set up, skip this step.)
+
+**Step 3: Push to GitHub**
+```bash
+git push
+```
+
+**Step 4: Verify on GitHub**
+
+Go to your repository on GitHub and refresh the page. You should see your new commit!
+
+### Git Commands Learned So Far
+
+| Command | What It Does |
+|---------|--------------|
+| `git status` | Show what's changed |
+| `git add <file>` | Stage changes for commit |
+| `git commit -m "msg"` | Save staged changes |
+| `git log` | Show commit history |
+| `git diff` | Show changes line-by-line |
+| `git commit --amend` | Fix your last commit |
+| `git remote -v` | List remotes |
+| `git push` | Upload commits to GitHub |
+| `git pull` | Download commits from GitHub |
+
+You've built a program that talks to a real web API — and it's backed up on GitHub!

@@ -586,20 +586,183 @@ In **Phase 2**, you'll make this script interactive — it will ask the user for
 
 ---
 
-## Commit Your Work
+## Introduction to Git
 
-Once everything works, save your progress with Git:
+Now that you have working code, let's learn how to save it properly with **Git**.
 
-1. Open the terminal in VS Code (`Ctrl+`` `)
-2. Run these commands:
+### What is Git?
+
+**Git** is a **version control system** — software that tracks changes to your files over time. Think of it like:
+- **Unlimited undo** — you can go back to any previous version
+- **Save points** in a video game — you can return to a known-good state
+- A **time machine** for your code
+
+Git is used by almost every professional programmer. Learning it now will serve you throughout your career.
+
+### The Three Areas of Git
+
+Git organizes your work into three areas:
+
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│ Working         │    │ Staging         │    │ Repository      │
+│ Directory       │ →  │ Area            │ →  │ (History)       │
+│                 │    │                 │    │                 │
+│ Files you edit  │    │ Changes ready   │    │ Saved commits   │
+│                 │    │ to be saved     │    │                 │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+     git add              git commit
+```
+
+1. **Working Directory**: The files you see and edit in VS Code
+2. **Staging Area**: A holding zone for changes you want to save
+3. **Repository**: The complete history of all your commits
+
+### Your First Git Commands
+
+#### Checking Status: `git status`
+
+This is the most useful Git command. It shows:
+- Which files have changed
+- Which changes are staged (ready to commit)
+- Which files Git doesn't know about yet
+
+**Try it now** — open the terminal and run:
+```bash
+git status
+```
+
+You should see something like:
+```
+On branch main
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+        modified:   src/search_url.py
+
+no changes added to commit (use "git add" and/or "git commit -a")
+```
+
+This tells you `search_url.py` has changes that haven't been saved yet.
+
+**Tip**: Run `git status` frequently! It helps you understand what Git sees.
+
+#### Staging Changes: `git add`
+
+Before you can save (commit) changes, you must **stage** them. This lets you choose exactly what to include in each save.
 
 ```bash
 git add src/search_url.py
+```
+
+This tells Git: "Include this file in my next commit."
+
+**What if I want to stage everything?**
+```bash
+git add .
+```
+The `.` means "current directory" — it stages all changed files.
+
+Now run `git status` again:
+```
+On branch main
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   src/search_url.py
+```
+
+Notice it now says "Changes to be committed" — the file is staged!
+
+#### Saving Your Work: `git commit`
+
+A **commit** is a snapshot of your staged changes. Each commit has:
+- The changes themselves
+- A message describing what you did
+- A timestamp
+- A unique ID (a long string of letters and numbers)
+
+```bash
 git commit -m "Phase 1: YouTube search URL generator"
 ```
 
-**What these commands do:**
-- `git add src/search_url.py` — tells Git to track changes to this file
-- `git commit -m "..."` — saves a snapshot of your code with a message describing what you did
+The `-m` flag lets you provide a message on the command line. The message should briefly describe what you changed.
+
+**Good commit messages:**
+- "Add URL encoding to handle spaces"
+- "Fix bug in search function"
+- "Phase 1: YouTube search URL generator"
+
+**Bad commit messages:**
+- "stuff" (too vague)
+- "fixed it" (fixed what?)
+- "asdfasdf" (meaningless)
+
+#### Viewing History: `git log`
+
+After committing, you can see your history:
+```bash
+git log
+```
+
+This shows all your commits, newest first:
+```
+commit a1b2c3d4e5f6... (HEAD -> main)
+Author: Your Name <your.email@example.com>
+Date:   Mon Jan 15 10:30:00 2024
+
+    Phase 1: YouTube search URL generator
+```
+
+Press `q` to exit the log view.
+
+**Shorter version:**
+```bash
+git log --oneline
+```
+
+Shows one line per commit — easier to scan.
+
+### Exercise: Commit Your Work
+
+Now let's practice! Follow these steps:
+
+**Step 1: Check what's changed**
+```bash
+git status
+```
+
+**Step 2: Stage your file**
+```bash
+git add src/search_url.py
+```
+
+**Step 3: Commit with a message**
+```bash
+git commit -m "Phase 1: YouTube search URL generator"
+```
+
+**Step 4: Verify it worked**
+```bash
+git log --oneline
+```
+
+You should see your new commit at the top!
+
+### Common Mistakes
+
+| Problem | Cause | Solution |
+|---------|-------|----------|
+| "nothing to commit" | No changes staged | Run `git add` first |
+| "not a git repository" | You're in the wrong folder | Navigate to your project folder |
+| Forgot the `-m` flag | Git opens a text editor | Type your message, save, and close the editor (or press Ctrl+C and try again with `-m`) |
+
+### Git Vocabulary
+
+| Term | Definition |
+|------|------------|
+| **Repository (repo)** | A project tracked by Git |
+| **Commit** | A saved snapshot of your changes |
+| **Stage** | Mark changes to be included in the next commit |
+| **Working directory** | The files you're currently editing |
+| **HEAD** | The current commit you're working from |
 
 You now have a saved checkpoint you can always come back to!

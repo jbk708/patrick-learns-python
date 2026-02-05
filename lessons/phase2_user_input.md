@@ -783,19 +783,113 @@ In **Phase 3**, you'll connect to the real YouTube API to get actual video URLs 
 
 ---
 
-## Commit Your Work
+## Git: Seeing Changes with `git diff`
+
+In Phase 1, you learned `git status`, `git add`, and `git commit`. Now let's learn how to see exactly what changed.
+
+### Viewing Uncommitted Changes: `git diff`
+
+The `git diff` command shows you the exact lines that changed:
+
+```bash
+git diff
+```
+
+Output looks like this:
+```diff
+diff --git a/src/search_url.py b/src/search_url.py
+--- a/src/search_url.py
++++ b/src/search_url.py
+@@ -15,6 +15,14 @@ def create_search_url(title):
+     return search_url
+
+
++def get_user_input():
++    """Prompt user for a video title with validation."""
++    while True:
++        title = input("Enter video title: ").strip()
++        if title:
++            return title
++        print("Please enter a title!")
++
+```
+
+Reading the diff:
+- Lines starting with `+` (green) were **added**
+- Lines starting with `-` (red) were **removed**
+- Other lines are context (unchanged, just for reference)
+
+**Try it now:**
+```bash
+git diff src/search_url.py
+```
+
+### Viewing Staged Changes
+
+Once you've run `git add`, `git diff` shows nothing (the changes are staged). To see staged changes:
+
+```bash
+git diff --staged
+```
+
+### Fixing Commit Mistakes: `git commit --amend`
+
+Made a typo in your commit message? Forgot to include a file? The `--amend` flag lets you fix your last commit:
+
+**Fix the commit message:**
+```bash
+git commit --amend -m "Phase 2: Add interactive input with validation and abbreviations"
+```
+
+**Add a forgotten file to the last commit:**
+```bash
+git add forgotten_file.py
+git commit --amend --no-edit
+```
+
+The `--no-edit` flag keeps the original message.
+
+**Warning**: Only amend commits you haven't pushed yet! Amending rewrites history, which can cause problems if others have already seen the original commit.
+
+### Exercise: Commit Your Work
 
 Once everything works and Ruff passes:
 
-1. Check what files changed:
-   ```bash
-   git status
-   ```
+**Step 1: See what changed**
+```bash
+git diff src/search_url.py
+```
 
-2. Add and commit:
-   ```bash
-   git add src/search_url.py
-   git commit -m "Phase 2: Add interactive input with validation"
-   ```
+Review the changes — do they look right?
+
+**Step 2: Check status**
+```bash
+git status
+```
+
+**Step 3: Stage and commit**
+```bash
+git add src/search_url.py
+git commit -m "Phase 2: Add interactive input with validation"
+```
+
+**Step 4: Verify**
+```bash
+git log --oneline -3
+```
+
+This shows your last 3 commits.
+
+### Git Commands Learned So Far
+
+| Command | What It Does |
+|---------|--------------|
+| `git status` | Show what's changed |
+| `git add <file>` | Stage changes for commit |
+| `git commit -m "msg"` | Save staged changes |
+| `git log` | Show commit history |
+| `git diff` | Show unstaged changes line-by-line |
+| `git diff --staged` | Show staged changes line-by-line |
+| `git commit --amend` | Fix your last commit |
 
 You've made your first interactive Python program!
