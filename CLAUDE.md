@@ -123,11 +123,24 @@ roku-youtube-sync/
 
 ## Dependencies (accumulated across phases)
 
+**Runtime:**
 ```
 requests
 ```
 
-Standard library modules used: `urllib.parse`, `json`, `xml.etree.ElementTree`, `webbrowser`, `argparse`, `pathlib`
+**Development (installed with `uv add --dev`):**
+```
+ruff      # Introduced in Phase 2
+ty        # Introduced in Phase 3
+```
+
+**Optional (Phase 7):**
+```
+flask     # Web UI option
+scapy     # Packet inspection option
+```
+
+Standard library modules used: `urllib.parse`, `json`, `xml.etree.ElementTree`, `webbrowser`, `argparse`, `pathlib`, `datetime`
 
 ## Notes for Claude Code
 
@@ -143,13 +156,13 @@ Standard library modules used: `urllib.parse`, `json`, `xml.etree.ElementTree`, 
 
 | Phase | Lesson File | Status | Notes |
 |-------|-------------|--------|-------|
-| 1 | `lessons/phase1_string_manipulation.md` | COMPLETE | Strings, functions, URL encoding |
-| 2 | `lessons/phase2_user_input.md` | NOT STARTED | |
-| 3 | `lessons/phase3_youtube_api.md` | NOT STARTED | |
-| 4 | `lessons/phase4_persistence.md` | NOT STARTED | |
-| 5 | `lessons/phase5_roku_discovery.md` | NOT STARTED | |
-| 6 | `lessons/phase6_cli_integration.md` | NOT STARTED | |
-| 7 | `lessons/phase7_advanced.md` | NOT STARTED | Optional |
+| 1 | `lessons/phase1_string_manipulation.md` | LESSON COMPLETE | Strings, functions, URL encoding |
+| 2 | `lessons/phase2_user_input.md` | LESSON COMPLETE | input(), validation, loops, dictionaries, **introduces Ruff** |
+| 3 | `lessons/phase3_youtube_api.md` | LESSON COMPLETE | requests, JSON, APIs, webbrowser, **introduces type hints + ty** |
+| 4 | `lessons/phase4_persistence.md` | LESSON COMPLETE | File I/O, pathlib, JSON persistence, config management |
+| 5 | `lessons/phase5_roku_discovery.md` | LESSON COMPLETE | HTTP to local devices, XML parsing, discovering limitations |
+| 6 | `lessons/phase6_cli_integration.md` | LESSON COMPLETE | argparse, subcommands, error handling, full workflow |
+| 7 | `lessons/phase7_advanced.md` | LESSON COMPLETE | Optional: Flask web UI, packet inspection, advanced workarounds |
 
 ### Learner Progress
 
