@@ -544,6 +544,109 @@ If you finish early and want more practice:
 
 ---
 
+## Reading Error Messages
+
+When your code doesn't work, Python shows an **error message** (also called a **traceback**). Learning to read these is one of the most important skills in programming!
+
+### Anatomy of an Error Message
+
+Here's an example error:
+
+```
+Traceback (most recent call last):
+  File "src/search_url.py", line 12, in <module>
+    url = create_search_url(video_title)
+  File "src/search_url.py", line 8, in create_search_url
+    encoded_title = quote_plus(titel)
+NameError: name 'titel' is not defined
+```
+
+**How to read it (from BOTTOM to TOP):**
+
+1. **Last line** — The actual error: `NameError: name 'titel' is not defined`
+   - This tells you WHAT went wrong
+   - Here: we used `titel` but Python doesn't know what that is (it's a typo!)
+
+2. **Lines above** — The path Python took to get to the error:
+   - `File "src/search_url.py", line 8` — the file and line number
+   - `encoded_title = quote_plus(titel)` — the actual code that failed
+
+3. **Top line** — `Traceback (most recent call last)` just means "here's the error trail"
+
+**The key insight**: Always start reading from the **bottom**!
+
+### Common Error Types
+
+| Error Type | What It Means | Example Cause |
+|------------|---------------|---------------|
+| **SyntaxError** | Python can't understand your code | Missing colon, unmatched quotes, typo in keyword |
+| **NameError** | You used a name Python doesn't recognize | Typo in variable name, forgot to define it, forgot import |
+| **TypeError** | Wrong type of data | Adding string + number, calling non-function |
+| **IndentationError** | Spacing is wrong | Mixed tabs/spaces, wrong indent level |
+| **AttributeError** | Object doesn't have that attribute | Typo in method name, wrong object type |
+| **KeyError** | Dictionary key doesn't exist | Typo in key name, key was never added |
+| **IndexError** | List index out of range | Accessing item 5 in a 3-item list |
+
+### Practice: Identify These Errors
+
+Try to predict what's wrong before reading the answer:
+
+**Error 1:**
+```
+  File "search_url.py", line 5
+    def create_search_url(title)
+                                ^
+SyntaxError: expected ':'
+```
+<details>
+<summary>Answer</summary>
+Missing colon at the end of the `def` line. Should be `def create_search_url(title):`
+</details>
+
+**Error 2:**
+```
+Traceback (most recent call last):
+  File "search_url.py", line 10, in <module>
+    print(search_url)
+NameError: name 'search_url' is not defined
+```
+<details>
+<summary>Answer</summary>
+The variable `search_url` doesn't exist at line 10. Either you didn't create it, or you spelled it differently (like `searchUrl` or `url`).
+</details>
+
+**Error 3:**
+```
+Traceback (most recent call last):
+  File "search_url.py", line 3, in <module>
+    from urllib.parse import quoteplus
+ImportError: cannot import name 'quoteplus' from 'urllib.parse'
+```
+<details>
+<summary>Answer</summary>
+The function is called `quote_plus` (with underscore), not `quoteplus`.
+</details>
+
+### Debugging Tips
+
+1. **Read the last line first** — it tells you the error type and message
+2. **Look at the line number** — go to that line in your code
+3. **Check for typos** — most errors are simple spelling mistakes
+4. **Google the error** — copy the error type and message, someone has seen it before
+5. **Use `print()` to inspect** — add `print(variable)` to see what values actually are
+
+### When You're Stuck
+
+If you can't figure out an error:
+
+1. Read the error message out loud (seriously, it helps!)
+2. Compare your code character-by-character with the example
+3. Check that you saved the file (Ctrl+S) before running
+4. Try closing and reopening VS Code
+5. Ask for help — share the full error message, not just "it doesn't work"
+
+---
+
 ## Common Mistakes
 
 | Problem | Likely Cause |

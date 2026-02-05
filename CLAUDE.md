@@ -156,9 +156,9 @@ Standard library modules used: `urllib.parse`, `json`, `xml.etree.ElementTree`, 
 
 | Phase | Lesson File | Status | Notes |
 |-------|-------------|--------|-------|
-| 1 | `lessons/phase1_string_manipulation.md` | LESSON COMPLETE | Strings, functions, URL encoding |
-| 2 | `lessons/phase2_user_input.md` | LESSON COMPLETE | input(), validation, loops, dictionaries, **introduces Ruff** |
-| 3 | `lessons/phase3_youtube_api.md` | LESSON COMPLETE | requests, JSON, APIs, webbrowser, **introduces type hints + ty** |
+| 1 | `lessons/phase1_string_manipulation.md` | LESSON COMPLETE | Strings, functions, URL encoding, **reading error messages** |
+| 2 | `lessons/phase2_user_input.md` | LESSON COMPLETE | input(), validation, loops, dictionaries, **introduces Ruff**, **VS Code debugging** |
+| 3 | `lessons/phase3_youtube_api.md` | LESSON COMPLETE | requests, JSON, APIs, webbrowser, **introduces type hints + ty**, **introduces pytest** |
 | 4 | `lessons/phase4_persistence.md` | LESSON COMPLETE | File I/O, pathlib, JSON persistence, config management |
 | 5 | `lessons/phase5_roku_discovery.md` | LESSON COMPLETE | HTTP to local devices, XML parsing, discovering limitations |
 | 6 | `lessons/phase6_cli_integration.md` | LESSON COMPLETE | argparse, subcommands, error handling, full workflow |
@@ -190,6 +190,17 @@ Git is taught progressively alongside Python. Each phase introduces new Git conc
 | 3 | Working with GitHub, syncing code | `git remote`, `git push`, `git pull` |
 | 4 | Undoing changes, reverting commits | `git checkout --`, `git restore`, `git revert`, `git reset` |
 | 5 | Branches and merging | `git branch`, `git checkout -b`, `git switch`, `git merge` |
+
+### Debugging & Testing Progression
+
+Debugging and testing are taught progressively:
+
+| Phase | Concept | What's Covered |
+|-------|---------|----------------|
+| README | Virtual environments | What .venv is, why isolation matters, how `uv run` works |
+| 1 | Reading error messages | Stack traces, common error types (NameError, SyntaxError, etc.), debugging tips |
+| 2 | VS Code debugging | Breakpoints, debug controls, stepping through code, VARIABLES panel, print debugging |
+| 3 | pytest basics | Installing pytest, writing tests, assert statements, running tests, test naming |
 
 ### Learner Progress
 

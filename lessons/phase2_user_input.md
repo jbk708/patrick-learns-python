@@ -737,6 +737,127 @@ Run your script and verify:
 
 ---
 
+## Debugging with VS Code
+
+When `print()` isn't enough, VS Code has a powerful **debugger** that lets you pause your code and inspect what's happening step by step.
+
+### What is Debugging?
+
+**Debugging** is the process of finding and fixing bugs in your code. The VS Code debugger lets you:
+- **Pause** your code at any line
+- **Inspect** the values of variables at that moment
+- **Step through** code one line at a time
+- **Watch** how variables change
+
+### Setting a Breakpoint
+
+A **breakpoint** is a marker that tells the debugger "pause here."
+
+**To set a breakpoint:**
+1. Open your Python file in VS Code
+2. Click in the **left margin** next to a line number (the gray area to the left of the line numbers)
+3. A red dot appears — that's your breakpoint!
+
+Try it: Set a breakpoint on this line in your code:
+```python
+url = create_search_url(video_title)
+```
+
+### Running in Debug Mode
+
+Instead of running with `uv run python`, we'll use VS Code's debugger:
+
+1. Open your Python file
+2. Press **F5** (or go to Run → Start Debugging)
+3. If asked, select "Python Debugger" then "Python File"
+
+The code runs until it hits your breakpoint, then **pauses**.
+
+### The Debug Interface
+
+When paused at a breakpoint, you'll see:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  VARIABLES          │                                       │
+│  ─────────          │     Your code                         │
+│  video_title: "cat" │     (current line highlighted)        │
+│  url: undefined     │                                       │
+│                     │                                       │
+│  WATCH              │                                       │
+│  ─────              │                                       │
+│  (add expressions)  │                                       │
+│                     │                                       │
+│  CALL STACK         │                                       │
+│  ──────────         │                                       │
+│  main()             │                                       │
+│  <module>           │                                       │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Key panels:**
+- **VARIABLES**: Shows all variables and their current values
+- **WATCH**: Add expressions to monitor (right-click → "Add Expression")
+- **CALL STACK**: Shows which functions called which (useful for complex code)
+
+### Debug Controls
+
+At the top of VS Code, you'll see these controls:
+
+| Button | Keyboard | What It Does |
+|--------|----------|--------------|
+| ▶️ Continue | F5 | Run until the next breakpoint |
+| ⏭️ Step Over | F10 | Run the current line, move to the next |
+| ⬇️ Step Into | F11 | If the line calls a function, go inside it |
+| ⬆️ Step Out | Shift+F11 | Finish the current function, return to caller |
+| 🔄 Restart | Ctrl+Shift+F5 | Start over from the beginning |
+| ⏹️ Stop | Shift+F5 | Stop debugging |
+
+**Most useful for beginners**: **Step Over (F10)** — it runs one line at a time.
+
+### Exercise: Debug Your Script
+
+1. Set a breakpoint on the first line inside `get_user_input()`
+2. Press F5 to start debugging
+3. When it pauses, look at the VARIABLES panel
+4. Press F10 (Step Over) to move through the code
+5. Watch how `video_title` gets its value after `input()` runs
+6. Continue pressing F10 to see the flow
+
+### Quick Debugging with print()
+
+Sometimes the debugger is overkill. For quick checks, `print()` works great:
+
+```python
+def get_user_input():
+    """Get a video title from the user."""
+    while True:
+        video_title = input("Enter a video title: ").strip()
+        print(f"DEBUG: got input '{video_title}'")  # Temporary debug line
+        print(f"DEBUG: length is {len(video_title)}")  # Temporary debug line
+
+        if video_title:
+            return video_title
+        print("Please enter a title (not just spaces).")
+```
+
+**Tips for print debugging:**
+- Prefix with `DEBUG:` so you remember to remove them later
+- Print the variable AND its type: `print(f"DEBUG: x = {x}, type = {type(x)}")`
+- Remove debug prints before committing!
+
+### When to Use Each
+
+| Situation | Use |
+|-----------|-----|
+| "What value does this variable have?" | Quick `print()` |
+| "Why does this loop run forever?" | Debugger with breakpoint |
+| "What's the flow through my code?" | Debugger, step through |
+| "Is my function being called?" | Quick `print("function called!")` |
+| "Complex logic I don't understand" | Debugger |
+
+---
+
 ## Common Mistakes
 
 | Problem | Likely Cause |

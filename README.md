@@ -241,6 +241,74 @@ uv add requests
 
 This automatically creates a virtual environment (in `.venv/`) and installs the package. You don't need to manually activate anything — `uv run` handles it.
 
+### Understanding Virtual Environments
+
+When you installed `requests` above, `uv` created a **virtual environment**. This is an important concept worth understanding.
+
+**The Problem Virtual Environments Solve**
+
+Imagine you have two Python projects:
+- Project A needs `requests` version 2.25
+- Project B needs `requests` version 2.31
+
+If you install packages "globally" (for your whole computer), you can only have ONE version of `requests`. That breaks one of your projects!
+
+**The Solution: Isolation**
+
+A **virtual environment** is an isolated Python installation for a single project. Each project gets its own:
+- Set of installed packages
+- Package versions
+- No conflicts with other projects
+
+```
+Your Computer
+├── Project A/
+│   └── .venv/           ← Project A's virtual environment
+│       └── requests 2.25
+├── Project B/
+│   └── .venv/           ← Project B's virtual environment
+│       └── requests 2.31
+└── System Python        ← Stays clean, no packages installed here
+```
+
+**How uv Manages This**
+
+When you run `uv add requests`:
+1. uv creates a `.venv/` folder in your project (if it doesn't exist)
+2. uv installs `requests` inside that `.venv/` folder
+3. uv records the dependency in `pyproject.toml`
+
+When you run `uv run python your_script.py`:
+1. uv automatically uses the Python inside `.venv/`
+2. Your script can access packages installed in `.venv/`
+3. You don't need to "activate" anything manually
+
+**Why `uv run` Instead of Just `python`?**
+
+| Command | What It Uses |
+|---------|--------------|
+| `python script.py` | System Python (no project packages!) |
+| `uv run python script.py` | Project's virtual environment (has your packages) |
+
+If you forget `uv run`, you'll see errors like `ModuleNotFoundError: No module named 'requests'` even though you installed it.
+
+**The .venv Folder**
+
+- Located at `.venv/` in your project root
+- Contains a copy of Python and all installed packages
+- Should NOT be committed to Git (it's in `.gitignore`)
+- Can be recreated anytime with `uv sync`
+
+**If Things Go Wrong**
+
+Virtual environment broken? Delete it and recreate:
+```bash
+rm -rf .venv
+uv sync
+```
+
+This reinstalls everything from `pyproject.toml`.
+
 ### Create a .gitignore
 
 Create a file called `.gitignore` in the project root with this content:

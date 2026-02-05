@@ -844,6 +844,161 @@ The quota is generous for learning — just don't run your script in a loop!
 
 ---
 
+## Introduction to Testing with pytest
+
+So far, you've tested your code by running it and checking the output manually. That works, but it's tedious and error-prone. **Automated tests** let you verify your code works correctly with a single command.
+
+### Why Write Tests?
+
+- **Catch bugs early** — find problems before users do
+- **Refactor safely** — change code knowing tests will catch mistakes
+- **Document behavior** — tests show how code should work
+- **Save time** — run 100 checks in seconds instead of manually
+
+### Installing pytest
+
+**pytest** is Python's most popular testing framework. Install it as a dev dependency:
+
+```bash
+uv add --dev pytest
+```
+
+### Your First Test
+
+Create a new file `tests/test_youtube_search.py`:
+
+```python
+"""Tests for youtube_search module."""
+from src.youtube_search import create_video_url, get_first_video_id
+
+
+def test_create_video_url():
+    """Test that create_video_url builds correct URLs."""
+    result = create_video_url("abc123")
+    assert result == "https://www.youtube.com/watch?v=abc123"
+
+
+def test_create_video_url_different_id():
+    """Test with a different video ID."""
+    result = create_video_url("xyz789")
+    assert result == "https://www.youtube.com/watch?v=xyz789"
+
+
+def test_get_first_video_id_with_results():
+    """Test extracting video ID from API response."""
+    fake_response = {
+        "items": [
+            {"id": {"videoId": "test123"}}
+        ]
+    }
+    result = get_first_video_id(fake_response)
+    assert result == "test123"
+
+
+def test_get_first_video_id_empty_results():
+    """Test when there are no search results."""
+    fake_response = {"items": []}
+    result = get_first_video_id(fake_response)
+    assert result is None
+```
+
+### Understanding Tests
+
+Let's break down the test structure:
+
+```python
+def test_create_video_url():          # Function name starts with test_
+    """Test that create_video_url builds correct URLs."""  # Docstring explains what we're testing
+    result = create_video_url("abc123")  # Call the function
+    assert result == "https://www.youtube.com/watch?v=abc123"  # Check the result
+```
+
+**Key points:**
+- Test function names **must start with `test_`**
+- Use `assert` to check that something is true
+- If the assert fails, pytest reports an error
+- Each test should check one specific thing
+
+### Running Tests
+
+Run all tests:
+
+```bash
+uv run pytest
+```
+
+You should see output like:
+
+```
+========================= test session starts =========================
+collected 4 items
+
+tests/test_youtube_search.py ....                                [100%]
+
+========================== 4 passed in 0.05s ==========================
+```
+
+The dots (`.`) mean tests passed. An `F` means a test failed.
+
+### When a Test Fails
+
+If a test fails, pytest shows you exactly what went wrong:
+
+```
+FAILED tests/test_youtube_search.py::test_create_video_url
+    assert result == "https://www.youtube.com/watch?v=abc123"
+    AssertionError: assert 'https://youtube.com/watch?v=abc123' == 'https://www.youtube.com/watch?v=abc123'
+```
+
+This tells you:
+- Which test failed
+- What the actual value was vs. expected
+- Exactly where it differs (missing `www.`)
+
+### Test Naming Conventions
+
+| Convention | Example |
+|------------|---------|
+| Test files | `test_*.py` or `*_test.py` |
+| Test functions | `test_*` |
+| Be descriptive | `test_get_first_video_id_empty_results` |
+
+### What to Test
+
+Good things to test:
+- **Normal cases** — typical inputs
+- **Edge cases** — empty strings, None, empty lists
+- **Error cases** — invalid inputs
+
+For now, focus on testing functions that don't make network requests (like `create_video_url`). Testing network calls is more advanced.
+
+### Exercise: Write a Test
+
+Add a test for the case where `get_first_video_id` receives a response with no `items` key:
+
+```python
+def test_get_first_video_id_no_items_key():
+    """Test when response has no items key."""
+    fake_response = {}
+    result = get_first_video_id(fake_response)
+    assert result is None
+```
+
+Run `uv run pytest` to verify your test passes!
+
+### Adding Tests to Your Workflow
+
+From now on:
+
+1. **Write code**
+2. **Write tests** (or at least one test)
+3. **Run tests**: `uv run pytest`
+4. **Run linter**: `uv run ruff check src/`
+5. **Run type checker**: `uv run ty check src/`
+6. **Commit**
+
+---
+
 ## Vocabulary Review
 
 | Term | Definition |
